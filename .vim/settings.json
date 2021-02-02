@@ -1,0 +1,8 @@
+{
+  "pyls.plugins.pylint.enabled": false,
+  "initializationOptions": {
+    "onlyAnalyzeProjectsWithOpenFiles": true,
+    "suggestFromUnimportedLibraries": false,
+    "closingLabels": false
+  }
+}
