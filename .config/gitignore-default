@@ -1,0 +1,7 @@
+compile_commands.json
+tags*
+.ctags_exclude
+.envrc
+.vimrc.local
+.vim/
+.cargo/

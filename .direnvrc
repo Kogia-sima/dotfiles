@@ -1,0 +1,17 @@
+use_python() {
+  local python_root=$PYENV_ROOT/versions/$1
+  if [[ -x "$python_root/bin/python" ]]; then
+    load_prefix "$python_root"
+  else
+    echo "Python $1 not available; using default"
+  fi
+}
+
+use_ruby() {
+  local ruby_root=$RBENV_ROOT/versions/$1
+  if [[ -x "$ruby_root/bin/ruby" ]]; then
+    load_prefix "$ruby_root"
+  else
+    echo "Ruby $1 not available; using default"
+  fi
+}

@@ -1,0 +1,11 @@
+
+# ==================== Prefixes ====================
+# feat: New feature
+# break: Breaking change
+# fix: Bug fix
+# perf: Performance enhancement
+# refactor: Refactoring
+# doc: Documentation
+# test: Test
+# dep: Update dependencies
+# release: Release

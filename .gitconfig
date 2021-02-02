@@ -1,0 +1,37 @@
+[user]
+	name = Kogia-sima
+	email = orcinus4627@gmail.com
+[merge]
+	ff = true
+[mergetool]
+	prompt = true
+[mergetool "vimdiff"]
+	cmd = nvim -d $LOCAL $REMOTE -c '$wincmd l'
+[difftool]
+	prompt = false
+[diff]
+	tool = vimdiff
+	indentHeuristic = true
+[core]
+	editor = nvim
+	excludesfile = ~/.config/gitignore-default
+	autocrlf = false
+[alias]
+	fixup = "!f() { TARGET=$(git rev-parse "$1"); git commit --fixup=$TARGET && EDITOR=true git rebase -i --autostash --autosquash $TARGET^; }; f"
+	l = "!f() { git log --decorate --oneline --color=always |emojify |less -RNFX; }; f"
+	lg = "log --graph --oneline"
+	hub = "!f() { hub \"$@\"; }; f"
+	aliases = "config --get-regexp alias"
+	nerge = "merge --no-ff"
+	sclone = "clone --depth 1"
+  pushorigin = "push origin HEAD"
+[commit]
+	template = /home/kogia-sima/.config/gitmessage
+[issue]
+	type = github
+[pull]
+	ff = only
+[push]
+	default = simple
+[log]
+	graphColors = 9 bold,10 bold,11 bold,12 bold,13 bold,14 bold
