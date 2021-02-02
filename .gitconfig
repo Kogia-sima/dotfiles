@@ -6,14 +6,14 @@
 [mergetool]
 	prompt = true
 [mergetool "vimdiff"]
-	cmd = nvim -d $LOCAL $REMOTE -c '$wincmd l'
+	cmd = vim -d $LOCAL $REMOTE -c '$wincmd l'
 [difftool]
 	prompt = false
 [diff]
 	tool = vimdiff
 	indentHeuristic = true
 [core]
-	editor = nvim
+	editor = vim
 	excludesfile = ~/.config/gitignore-default
 	autocrlf = false
 [alias]
