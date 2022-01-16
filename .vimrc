@@ -1,3 +1,11 @@
+if has('win32')
+  let $USER_VIM_DIR = $HOME . '/_vim'
+else
+  let $USER_VIM_DIR = $HOME . '/.vim'
+endif
+
+source $USER_VIM_DIR/plugins.vim
+
 let g:tex_conceal=''
 " let g:loaded_netrw = 1
 " let g:loaded_netrwPlugin = 1
@@ -45,6 +53,8 @@ set virtualedit=block  "allow block-select after end of line
 " set list  " highlight special chars
 " set listchars=tab:>-,trail:~
 set backspace=indent,eol,start
+set noshowmode
+set noruler " for status line
 
 " GUI color settings
 if has('termguicolors')
@@ -62,16 +72,8 @@ if !has('nvim') && has('vim_starting')
     let &t_SR .= "\e[4 q"
 endif
 
-if has('nvim')
-  set noshowmode " for echodoc.vim
-  set noruler " for status line
-  set inccommand=nosplit
-  set fcs=eob:\  " hide end of buffer
-  tmap <C-l> <C-w>
-endif
-
 "backup settings
-if has('nvim') && trim(system('id -u')) != 0
+if !has('win32') && trim(system('id -u')) != 0
   set backup
   set backupcopy=yes " for inotify-dependent tools such as parcel.js
   set writebackup " 取得するバックアップを編集前のファイルとする(無効化する場合は「nowritebackup」)
@@ -148,40 +150,7 @@ autocmd CompleteDone,InsertLeave * if pumvisible() == 0 | pclose | endif
 
 "autocmd BufReadPost * silent exe '!mkdir -p /tmp/vim && cp -f ' . expand('%:p') . ' /tmp/vim/' . substitute(expand('%:p'), '/', '_', 'g')[1:] . ' &'
 
-augroup MyAutoCmd
-  autocmd ColorScheme * call s:additional_highlights()
-augroup END
-
-function! s:additional_highlights() abort
-  highlight Normal ctermbg=none guibg=NONE
-  highlight NonText ctermbg=none guibg=NONE
-  highlight Folded ctermbg=none guibg=NONE
-  highlight EndOfBuffer ctermbg=NONE guibg=NONE
-  highlight LineNr guifg=#666666
-  highlight TabLineSel ctermfg=0 ctermbg=119 guifg=#000000 guibg=#87ff5f
-  highlight TabLine ctermfg=230 ctermbg=240 guifg=#ffffd7 guibg=#555555 cterm=NONE
-  highlight TabLineFill ctermfg=235 ctermbg=235 guifg=#222222 guibg=#222222
-  highlight WintabsActiveSepEmpty ctermbg=NONE guibg=NONE
-  highlight Pmenu ctermfg=245 ctermbg=0 guifg=#dddddd guibg=#555555
-  highlight PmenuSel ctermbg=124 ctermfg=0 guifg=#000000 guibg=#cf2222
-  "highlight MatchParen cterm=reverse gui=reverse
-  highlight Comment ctermfg=243
-  highlight ALEError ctermbg=88 guibg=#aa0000
-  highlight ALEWarning ctermbg=130 guibg=#884400
-
-  " Coc highlighting
-  highlight CocFloating guibg=#000055
-  highlight CocErrorFloat gui=bold guifg=#ff0000
-  highlight CocWarningFloat gui=bold guifg=#ff8800
-  highlight CocErrorHighlight ctermbg=88 guibg=#aa0000
-  highlight CocWarningHighlight ctermbg=130 guibg=#884400
-  highlight CocErrorVirtualText ctermfg=9 guifg=#ff0000 guibg=#2b323b
-  highlight CocWarningVirtualText ctermfg=130 guifg=#ff922b guibg=#2b323b
-  highlight CocHintSign guifg=#aacc33 guibg=#003399
-  highlight Folded ctermbg=242 guibg=#555555 ctermfg=14 guifg=Cyan
-endfunction
-
-syntax on
+syntax enable
 try
   colorscheme onedark
 catch
@@ -189,6 +158,38 @@ catch
 endtry
 set t_Co=256
 set background=dark
+
+highlight Normal ctermbg=none guibg=NONE
+highlight NonText ctermbg=none guibg=NONE
+highlight Folded ctermbg=none guibg=NONE
+highlight EndOfBuffer ctermbg=NONE guibg=NONE
+highlight LineNr guifg=#666666
+highlight TabLineSel ctermfg=0 ctermbg=119 guifg=#000000 guibg=#87ff5f
+highlight TabLine ctermfg=230 ctermbg=240 guifg=#ffffd7 guibg=#555555 cterm=NONE
+highlight TabLineFill ctermfg=235 ctermbg=235 guifg=#222222 guibg=#222222
+highlight WintabsActiveSepEmpty ctermbg=NONE guibg=NONE
+highlight Pmenu ctermfg=245 ctermbg=0 guifg=#dddddd guibg=#555555
+highlight PmenuSel ctermbg=124 ctermfg=0 guifg=#000000 guibg=#cf2222
+"highlight MatchParen cterm=reverse gui=reverse
+highlight Comment ctermfg=243
+highlight ALEError ctermbg=88 guibg=#aa0000
+highlight ALEWarning ctermbg=130 guibg=#884400
+
+" Avoid issues in PowerShell
+highlight clear CursorLine
+highlight CursorLine cterm=underline gui=underline
+
+" Coc highlighting
+highlight CocFloating guibg=#000055
+highlight CocErrorFloat gui=bold guifg=#ff0000
+highlight CocWarningFloat gui=bold guifg=#ff8800
+highlight CocErrorHighlight ctermbg=88 guibg=#aa0000
+highlight CocWarningHighlight ctermbg=130 guibg=#884400
+highlight CocErrorVirtualText ctermfg=9 guifg=#ff0000 guibg=#2b323b
+highlight CocWarningVirtualText ctermfg=130 guifg=#ff922b guibg=#2b323b
+highlight CocHintSign guifg=#aacc33 guibg=#393939
+highlight CocHighlightText gui=underline
+highlight Folded ctermbg=242 guibg=#555555 ctermfg=14 guifg=Cyan
 
 function! s:vimrc_local(loc)
   let files = findfile('.vimrc.local', escape(a:loc, ' ') . ';', -1)
@@ -200,131 +201,131 @@ endfunction
 call s:vimrc_local(getcwd())
 
 " LogAutocmds {{{
-command! LogAutocmds call s:log_autocmds_toggle()
-
-function! s:log_autocmds_toggle()
-  augroup LogAutocmd
-    autocmd!
-  augroup END
-
-  let l:date = strftime('%F', localtime())
-  let s:activate = get(s:, 'activate', 0) ? 0 : 1
-  if !s:activate
-    call s:log('Stopped autocmd log (' . l:date . ')')
-    return
-  endif
-
-  call s:log('Started autocmd log (' . l:date . ')')
-  silent execute '!rm -f /tmp/vim_log_autocommands'
-  augroup LogAutocmd
-    for l:au in s:aulist
-      if stridx(l:au, ' ') >= 0
-        silent execute 'autocmd' l:au 'call s:log(''' . l:au . ''')'
-      else
-        silent execute 'autocmd' l:au '* call s:log(''' . l:au . ''')'
-      endif
-    endfor
-  augroup END
-endfunction
-
-function! s:log(message)
-  silent execute '!echo "'
-        \ . strftime('%T', localtime()) . ' - ' . a:message . '"'
-        \ '>> /tmp/vim_log_autocommands'
-endfunction
-
-" These are deliberately left out due to side effects
-" - SourceCmd
-" - FileAppendCmd
-" - FileWriteCmd
-" - BufWriteCmd
-" - FileReadCmd
-" - BufReadCmd
-" - FuncUndefined
-
-let s:aulist = [
-      \ 'BufNewFile',
-      \ 'BufReadPre',
-      \ 'BufRead',
-      \ 'BufReadPost',
-      \ 'FileReadPre',
-      \ 'FileReadPost',
-      \ 'FilterReadPre',
-      \ 'FilterReadPost',
-      \ 'StdinReadPre',
-      \ 'StdinReadPost',
-      \ 'BufWrite',
-      \ 'BufWritePre',
-      \ 'BufWritePost',
-      \ 'FileWritePre',
-      \ 'FileWritePost',
-      \ 'FileAppendPre',
-      \ 'FileAppendPost',
-      \ 'FilterWritePre',
-      \ 'FilterWritePost',
-      \ 'BufAdd',
-      \ 'BufCreate',
-      \ 'BufDelete',
-      \ 'BufWipeout',
-      \ 'BufFilePre',
-      \ 'BufFilePost',
-      \ 'BufEnter',
-      \ 'BufLeave',
-      \ 'BufWinEnter',
-      \ 'BufWinLeave',
-      \ 'BufUnload',
-      \ 'BufHidden',
-      \ 'BufNew',
-      \ 'SwapExists',
-      \ 'FileType',
-      \ 'Syntax',
-      \ 'EncodingChanged',
-      \ 'TermChanged',
-      \ 'VimEnter',
-      \ 'GUIEnter',
-      \ 'GUIFailed',
-      \ 'TermResponse',
-      \ 'QuitPre',
-      \ 'VimLeavePre',
-      \ 'VimLeave',
-      \ 'FileChangedShell',
-      \ 'FileChangedShellPost',
-      \ 'FileChangedRO',
-      \ 'ShellCmdPost',
-      \ 'ShellFilterPost',
-      \ 'CmdUndefined',
-      \ 'SpellFileMissing',
-      \ 'SourcePre',
-      \ 'VimResized',
-      \ 'FocusGained',
-      \ 'FocusLost',
-      \ 'CursorHold',
-      \ 'CursorHoldI',
-      \ 'CursorMoved',
-      \ 'CursorMovedI',
-      \ 'WinEnter',
-      \ 'WinLeave',
-      \ 'TabEnter',
-      \ 'TabLeave',
-      \ 'CmdwinEnter',
-      \ 'CmdwinLeave',
-      \ 'InsertEnter',
-      \ 'InsertChange',
-      \ 'InsertLeave',
-      \ 'InsertCharPre',
-      \ 'TextChanged',
-      \ 'TextChangedI',
-      \ 'ColorScheme',
-      \ 'RemoteReply',
-      \ 'QuickFixCmdPre',
-      \ 'QuickFixCmdPost',
-      \ 'SessionLoadPost',
-      \ 'MenuPopup',
-      \ 'CompleteDone',
-      \ 'User',
-      \ 'User AirlineModeChanged',
-      \ 'User LanguageClientDiagnosticsChanged'
-      \ ]
+" command! LogAutocmds call s:log_autocmds_toggle()
+" 
+" function! s:log_autocmds_toggle()
+"   augroup LogAutocmd
+"     autocmd!
+"   augroup END
+" 
+"   let l:date = strftime('%F', localtime())
+"   let s:activate = get(s:, 'activate', 0) ? 0 : 1
+"   if !s:activate
+"     call s:log('Stopped autocmd log (' . l:date . ')')
+"     return
+"   endif
+" 
+"   call s:log('Started autocmd log (' . l:date . ')')
+"   silent execute '!rm -f /tmp/vim_log_autocommands'
+"   augroup LogAutocmd
+"     for l:au in s:aulist
+"       if stridx(l:au, ' ') >= 0
+"         silent execute 'autocmd' l:au 'call s:log(''' . l:au . ''')'
+"       else
+"         silent execute 'autocmd' l:au '* call s:log(''' . l:au . ''')'
+"       endif
+"     endfor
+"   augroup END
+" endfunction
+" 
+" function! s:log(message)
+"   silent execute '!echo "'
+"        \ . strftime('%T', localtime()) . ' - ' . a:message . '"'
+"        \ '>> /tmp/vim_log_autocommands'
+" endfunction
+" 
+" " These are deliberately left out due to side effects
+" " - SourceCmd
+" " - FileAppendCmd
+" " - FileWriteCmd
+" " - BufWriteCmd
+" " - FileReadCmd
+" " - BufReadCmd
+" " - FuncUndefined
+" 
+" let s:aulist = [
+"      \ 'BufNewFile',
+"      \ 'BufReadPre',
+"      \ 'BufRead',
+"      \ 'BufReadPost',
+"      \ 'FileReadPre',
+"      \ 'FileReadPost',
+"      \ 'FilterReadPre',
+"      \ 'FilterReadPost',
+"      \ 'StdinReadPre',
+"      \ 'StdinReadPost',
+"      \ 'BufWrite',
+"      \ 'BufWritePre',
+"      \ 'BufWritePost',
+"      \ 'FileWritePre',
+"      \ 'FileWritePost',
+"      \ 'FileAppendPre',
+"      \ 'FileAppendPost',
+"      \ 'FilterWritePre',
+"      \ 'FilterWritePost',
+"      \ 'BufAdd',
+"      \ 'BufCreate',
+"      \ 'BufDelete',
+"      \ 'BufWipeout',
+"      \ 'BufFilePre',
+"      \ 'BufFilePost',
+"      \ 'BufEnter',
+"      \ 'BufLeave',
+"      \ 'BufWinEnter',
+"      \ 'BufWinLeave',
+"      \ 'BufUnload',
+"      \ 'BufHidden',
+"      \ 'BufNew',
+"      \ 'SwapExists',
+"      \ 'FileType',
+"      \ 'Syntax',
+"      \ 'EncodingChanged',
+"      \ 'TermChanged',
+"      \ 'VimEnter',
+"      \ 'GUIEnter',
+"      \ 'GUIFailed',
+"      \ 'TermResponse',
+"      \ 'QuitPre',
+"      \ 'VimLeavePre',
+"      \ 'VimLeave',
+"      \ 'FileChangedShell',
+"      \ 'FileChangedShellPost',
+"      \ 'FileChangedRO',
+"      \ 'ShellCmdPost',
+"      \ 'ShellFilterPost',
+"      \ 'CmdUndefined',
+"      \ 'SpellFileMissing',
+"      \ 'SourcePre',
+"      \ 'VimResized',
+"      \ 'FocusGained',
+"      \ 'FocusLost',
+"      \ 'CursorHold',
+"      \ 'CursorHoldI',
+"      \ 'CursorMoved',
+"      \ 'CursorMovedI',
+"      \ 'WinEnter',
+"      \ 'WinLeave',
+"      \ 'TabEnter',
+"      \ 'TabLeave',
+"      \ 'CmdwinEnter',
+"      \ 'CmdwinLeave',
+"      \ 'InsertEnter',
+"      \ 'InsertChange',
+"      \ 'InsertLeave',
+"      \ 'InsertCharPre',
+"      \ 'TextChanged',
+"      \ 'TextChangedI',
+"      \ 'ColorScheme',
+"      \ 'RemoteReply',
+"      \ 'QuickFixCmdPre',
+"      \ 'QuickFixCmdPost',
+"      \ 'SessionLoadPost',
+"      \ 'MenuPopup',
+"      \ 'CompleteDone',
+"      \ 'User',
+"      \ 'User AirlineModeChanged',
+"      \ 'User LanguageClientDiagnosticsChanged'
+"      \ ]
 "}}}
 
 " toggle quickfix {{{
