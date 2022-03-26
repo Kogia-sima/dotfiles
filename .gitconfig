@@ -3,19 +3,29 @@
 	email = orcinus4627@gmail.com
 [merge]
 	ff = true
+  conflictstyle = diff3
 [mergetool]
 	prompt = true
 [mergetool "vimdiff"]
-	cmd = vim -d $LOCAL $REMOTE -c '$wincmd l'
+	cmd = nvim -d $LOCAL $REMOTE -c '$wincmd l'
 [difftool]
 	prompt = false
 [diff]
 	tool = vimdiff
 	indentHeuristic = true
+  colorMoved = default
 [core]
-	editor = vim
+	editor = nvim
+  pager = delta
 	excludesfile = ~/.config/gitignore-default
-	autocrlf = false
+  autocrlf = false
+[interactive]
+  diffFilter = delta --color-only
+[delta]
+  navigate = true
+  line-numbers = true
+  hunk-header-style = raw
+  hunk-header-decoration-style = omit
 [alias]
 	fixup = "!f() { TARGET=$(git rev-parse "$1"); git commit --fixup=$TARGET && EDITOR=true git rebase -i --autostash --autosquash $TARGET^; }; f"
 	l = "!f() { git log --decorate --oneline --color=always |emojify |less -RNFX; }; f"
@@ -35,3 +45,5 @@
 	default = simple
 [log]
 	graphColors = 9 bold,10 bold,11 bold,12 bold,13 bold,14 bold
+[init]
+	defaultBranch = main

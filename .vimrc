@@ -170,14 +170,14 @@ highlight TabLineFill ctermfg=235 ctermbg=235 guifg=#222222 guibg=#222222
 highlight WintabsActiveSepEmpty ctermbg=NONE guibg=NONE
 highlight Pmenu ctermfg=245 ctermbg=0 guifg=#dddddd guibg=#555555
 highlight PmenuSel ctermbg=124 ctermfg=0 guifg=#000000 guibg=#cf2222
-"highlight MatchParen cterm=reverse gui=reverse
+highlight MatchParen cterm=underline gui=underline
 highlight Comment ctermfg=243
 highlight ALEError ctermbg=88 guibg=#aa0000
 highlight ALEWarning ctermbg=130 guibg=#884400
 
 " Avoid issues in PowerShell
 highlight clear CursorLine
-highlight CursorLine cterm=underline gui=underline
+highlight CursorLine ctermbg=36 guibg=#333333
 
 " Coc highlighting
 highlight CocFloating guibg=#000055
@@ -347,6 +347,7 @@ function! ToggleList(bufname, pfx)
   if a:pfx == 'l' && len(getloclist(0)) == 0
       echohl ErrorMsg
       echo "Location List is Empty."
+      echohl None
       return
   endif
   let winnr = winnr()

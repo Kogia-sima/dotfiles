@@ -130,15 +130,15 @@ export npm_config_cache=/tmp/npm
 
 ########## direnv ##########
 
-if [[ -x /usr/bin/direnv ]]; then
-    _direnv_hook() {
-      eval "$(direnv export bash)";
-    };
-
-    if ! [[ "$PROMPT_COMMAND" =~ _direnv_hook ]]; then
-      PROMPT_COMMAND="_direnv_hook;$PROMPT_COMMAND";
-    fi
-fi
+# if [[ -x /usr/bin/direnv ]]; then
+#     _direnv_hook() {
+#       eval "$(direnv export bash)";
+#     };
+# 
+#     if ! [[ "$PROMPT_COMMAND" =~ _direnv_hook ]]; then
+#       PROMPT_COMMAND="_direnv_hook;$PROMPT_COMMAND";
+#     fi
+# fi
 
 if [[ -x ~/bin/powerline ]]; then
     function _update_ps1() {
