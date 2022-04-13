@@ -16,7 +16,7 @@
   colorMoved = default
 [core]
 	editor = nvim
-  pager = delta
+  # pager = delta
 	excludesfile = ~/.config/gitignore-default
   autocrlf = false
 [interactive]
