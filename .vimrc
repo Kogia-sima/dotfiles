@@ -12,6 +12,7 @@ let g:tex_conceal=''
 let g:netrw_fastbrowse = 0
 let g:loaded_matchit = 1
 let g:loaded_2html_plugin = 1
+let g:omni_sql_no_default_maps = 1
 
 set noswapfile
 set encoding=utf-8
@@ -29,7 +30,7 @@ set autoread  "warn if target file was changed
 set hidden  "allow switching buffer without save
 set number  "show line number
 set showcmd
-set laststatus=2  "status line height
+set laststatus=3  "global status line
 set cmdheight=2
 set wildmode=longest,list  "completion in command window
 set expandtab  "<tab> key to insert spaces
@@ -83,6 +84,7 @@ else
   set nobackup
 endif
 
+noremap q <Nop>
 nnoremap r <Nop>
 nnoremap rr "_dd
 vnoremap r "_d
@@ -159,7 +161,7 @@ endtry
 set t_Co=256
 set background=dark
 
-highlight Normal ctermbg=none guibg=NONE
+highlight Normal ctermbg=none guibg=#14161A
 highlight NonText ctermbg=none guibg=NONE
 highlight Folded ctermbg=none guibg=NONE
 highlight EndOfBuffer ctermbg=NONE guibg=NONE

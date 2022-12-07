@@ -15,7 +15,7 @@
 	indentHeuristic = true
   colorMoved = default
 [core]
-	editor = nvim
+	editor = nvim-qt --nofork
   # pager = delta
 	excludesfile = ~/.config/gitignore-default
   autocrlf = false
@@ -30,11 +30,11 @@
 	fixup = "!f() { TARGET=$(git rev-parse "$1"); git commit --fixup=$TARGET && EDITOR=true git rebase -i --autostash --autosquash $TARGET^; }; f"
 	l = "!f() { git log --decorate --oneline --color=always |emojify |less -RNFX; }; f"
 	lg = "log --graph --oneline"
-	hub = "!f() { hub \"$@\"; }; f"
 	aliases = "config --get-regexp alias"
 	nerge = "merge --no-ff"
 	sclone = "clone --depth 1"
   pushorigin = "push origin HEAD"
+  amend = "commit --amend -C HEAD"
 [commit]
 	template = /home/kogia-sima/.config/gitmessage
 [issue]

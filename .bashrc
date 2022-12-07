@@ -142,7 +142,7 @@ export npm_config_cache=/tmp/npm
 
 if [[ -x ~/bin/powerline ]]; then
     function _update_ps1() {
-        PS1="$(~/bin/powerline $?)"
+        PS1=`~/bin/powerline $?`
     }
 
     if [[ $TERM != linux && ! $PROMPT_COMMAND =~ _update_ps1 ]]; then
