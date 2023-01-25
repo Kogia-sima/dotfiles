@@ -1,0 +1,43 @@
+snippet     main
+abbr        main function
+options     head
+  fun main(args: Array<String>) {
+    ${0:TARGET}
+  }
+
+snippet     if
+abbr        if statement
+options     head
+  if (${1}) {
+    ${0:TARGET}
+  }
+
+snippet     ifelse
+abbr        if statement with else block
+options     head
+  if (${1}) {
+    ${2}
+  } else {
+    ${0:TARGET}
+  }
+
+snippet     forin
+abbr        for loop
+options     head
+  for (${1:i} in ${2}) {
+    ${0:TARGET}
+  }
+
+snippet     class
+abbr        class
+options     head
+  class ${1}(${2:#:members}) {
+    ${0:TARGET}
+  }
+
+snippet     func
+abbr        function
+options     head
+  fun ${1}(${2:args}) {
+    ${0:TARGET}
+  }

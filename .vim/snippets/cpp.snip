@@ -1,0 +1,128 @@
+include c.snip
+
+# #include <...>
+snippet inc
+options     head
+alias   #inc, #include
+    #include <${1:iostream}>${0}
+
+# #include "..."
+snippet inc2
+options     head
+alias   #inc2, #include2
+    #include "${0}"
+
+snippet main
+options head
+    int main(${1:int argc, char *argv[]}) {
+      ${0:TARGET};
+      return 0;
+    }
+
+snippet copyright
+options     head
+    /*
+     * ${1:title}
+     * copyright: Kogia-sima 2018
+     */${0:TARGET}
+
+snippet     template
+abbr        template <T>
+    template <${0}>
+
+snippet     class
+options     head
+abbr        class {}
+    class ${1:#:name} {
+    public:
+    $1(${0:TARGET});
+    };  // class $1
+
+snippet     try
+options     head
+abbr        try catch
+    try {
+        ${1:#:TARGET}
+    } catch (${2:...}) {
+        ${0:TARGET}
+    }
+
+# range based for ( C++11 feature )
+snippet     foreach
+options     head
+abbr        for (:) {}
+    for (${1:auto&&} ${2:var} : ${3:container}) {
+        ${0:TARGET}
+    }
+
+# lambda expression ( C++11 feature )
+snippet     lambda
+abbr        [](){}
+    [${1}](${2})${3}{ ${0:TARGET} }
+
+# scoped enumeration ( C++11 feature )
+snippet     enum_struct
+options     head
+abbr        enum struct {};
+    enum struct ${1:#:name} { ${0:#:TARGET} };
+
+delete      namespace
+options     head
+snippet     namespace
+abbr        namespace {}
+    namespace ${1:#:name} {
+        ${0:TARGET}
+    }  // namespace $1
+
+snippet     static_cast
+abbr        static_cast<>()
+    static_cast<${1}>(${0})
+
+snippet     reinterpret_cast
+abbr        reinterpret_cast<>()
+    reinterpret_cast<${1}>(${2})${0}
+
+snippet     const_cast
+abbr        const_cast<>()
+    const_cast<${1}>(${2})${0}
+
+snippet     dynamic_cast
+abbr        dynamic_cast<>()
+    dynamic_cast<${1}>(${2})${0}
+
+snippet     helloworld
+abbr        #include<iostream> int main...
+    #include <iostream>
+
+    int main(int argc, char const* argv[]) {
+        std::cout << "hello, world!" << std::endl;
+        return 0;
+    }
+
+snippet print
+    std::cout << ${0:TARGET};
+
+snippet     println
+    std::cout << ${0:TARGET} << std::endl;
+
+snippet     error
+abbr        standard error
+    std::cerr << ${0} << std::endl;
+
+snippet func
+alias function
+options head
+    /**
+     * @brief ${5:brief}
+     * ${6:detail}
+     */
+    ${1:void} ${2:func}(${3:#:args}) ${4:noexcept }{
+      ${0:TARGET}
+    }
+
+snippet guard
+options head
+  #ifndef ${1:`IncludeGuardOfGit()`}
+  #define $1
+
+  #endif

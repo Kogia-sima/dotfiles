@@ -1,0 +1,145 @@
+snippet     class
+abbr        class definition
+options     head
+  class ${1:MyClass} {
+    $1({$2});
+    ${0:TARGET}
+  }
+
+snippet     child
+abbr        define new class extending some class
+options     head
+  class ${1:#:name} extends ${2:#:base} {
+    $1(${2});
+    ${0:TARGET}
+  }
+
+snippet     override
+abbr        override method
+options     head
+  @override
+  ${1:#:type} ${2:#:name}(${3:#:args}) {
+    ${0:TARGET}
+  }
+
+snippet     stateless
+abbr        stateless widget class
+options     head
+  class ${1:MyApp} extends StatelessWidget {
+    @override
+    Widget build(BuildContext context) {
+      ${0:TARGET};
+    }
+  }
+
+snippet     stateful
+abbr        stateful widget class
+options     head
+  class ${1:MyApp} extends StatefulWidget {
+    @override
+    _$1State createState() => ${2:_$1State()};
+  }
+
+  class _$1State extends State<$1> {
+    Widget build(BuildContext context) {
+      ${0:TARGET}
+    }
+  }
+
+snippet     if
+abbr        if statement
+options     head
+  if (${1}) {
+    ${0:TARGET}
+  }
+
+snippet     ifelse
+abbr        if statement with else branch
+options     head
+  if (${1}) {
+    ${2}
+  } else {
+    ${0:TARGET}
+  }
+
+snippet     for
+abbr        for loop
+options     head
+  for (${1:int i = 0}; ${2}; ${3}) {
+    ${0:TARGET}
+  }
+
+snippet     fori
+abbr        for loop
+options     head
+  for (${1:int} ${2:i} = ${3:0}; $2 < ${4}; ${5:++i}) {
+    ${0:TARGET}
+  }
+
+snippet     forin
+abbr        for-in statement
+options     head
+  for (${1:int} ${2} in ${3}) {
+    ${0:TARGET}
+  }
+
+snippet     while
+abbr        while statement
+options     head
+  while (${1}) {
+    ${0:TARGET}
+  }
+
+snippet     switch
+abbr        switch statement
+options     head
+  switch (${1}) {
+    case ${2}:
+      ${0:TARGET}
+      break;
+    default:
+  }
+
+snippet     try
+abbr        try block
+options     head
+  try {
+    ${0:TARGET}
+  }
+
+snippet     trycatch
+abbr        try block with catch part
+options     head
+  try {
+    ${0:TARGET}
+  } on ${1:Exception} catch (e) {
+    print(e.toString());
+  }
+
+snippet     label
+abbr        insert label at current context
+options     head
+  ${1:#:label name}:
+  ${0:TARGET}
+
+snippet     import
+abbr        import library
+options     head
+  import '${0:TARGET}';
+
+snippet     println
+abbr        print string
+alias       pln
+options     head
+  print(${0:TARGET});
+
+snippet     print
+abbr        print string without linebreak
+options     head
+  stdout.write(${0:TARGET});
+
+snippet     func
+abbr        function
+  ${1:func}(${2:#:arguments}) {
+    ${0:TARGET}
+  }
