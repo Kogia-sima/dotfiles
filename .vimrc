@@ -104,6 +104,10 @@ noremap <C-Up> <C-w>k
 noremap <C-Down> <C-w>j
 noremap <C-Left> <C-w>h
 noremap <C-Right> <C-w>l
+tnoremap <C-Up> <C-\><C-n><C-w>k
+tnoremap <C-Down> <C-\><C-n><C-w>j
+tnoremap <C-Left> <C-\><C-n><C-w>h
+tnoremap <C-Right> <C-\><C-n><C-w>l
 
 "inoremap {<Enter> {}<Left><CR><ESC><S-o>
 "inoremap ( ()<Left>
@@ -150,6 +154,8 @@ autocmd BufDelete,BufWipeOut,BufCreate,BufNew,BufNewFile,BufUnload * echo ''
 " auto close preview window
 autocmd CompleteDone,InsertLeave * if pumvisible() == 0 | pclose | endif
 
+autocmd FileType python setlocal foldmethod=syntax
+
 "autocmd BufReadPost * silent exe '!mkdir -p /tmp/vim && cp -f ' . expand('%:p') . ' /tmp/vim/' . substitute(expand('%:p'), '/', '_', 'g')[1:] . ' &'
 
 syntax enable
@@ -191,6 +197,7 @@ highlight CocErrorVirtualText ctermfg=9 guifg=#ff0000 guibg=#2b323b
 highlight CocWarningVirtualText ctermfg=130 guifg=#ff922b guibg=#2b323b
 highlight CocHintSign guifg=#aacc33 guibg=#393939
 highlight CocHighlightText gui=underline
+highlight CocInlayHint ctermfg=243 guifg=#5C6370
 highlight Folded ctermbg=242 guibg=#555555 ctermfg=14 guifg=Cyan
 
 function! s:vimrc_local(loc)

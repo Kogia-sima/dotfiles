@@ -125,9 +125,6 @@ if ! shopt -oq posix; then
   fi
 fi
 
-mkdir -p /tmp/vim /tmp/npm
-export npm_config_cache=/tmp/npm
-
 ########## direnv ##########
 
 # if [[ -x /usr/bin/direnv ]]; then

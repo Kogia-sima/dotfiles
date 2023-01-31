@@ -216,30 +216,30 @@ augroup END
 Plug 'Shougo/context_filetype.vim', {'for': ['html', 'vue', 'markdown', 'jsx', 'ejs']} "{{{
 " }}}
 
-Plug 'jupyter-vim/jupyter-vim' "{{{
-let g:jupyter_mapkeys = 0
-nmap J <Nop>
-
-" Connect to the kernel
-nnoremap <buffer> <silent> JJ :JupyterConnect<CR>
-nnoremap <buffer> <silent> Jd :JupyterDisconnect<CR>
-
-" Run current file
-nnoremap <buffer> <silent> Jf :JupyterRunFile<CR>
-nnoremap <buffer> <silent> Ji :PythonImportThisFile<CR>
-
-" Send current cell
-nnoremap <buffer> <silent> Jc :JupyterSendCell<CR>
-" Send current line
-nnoremap <buffer> <silent> Jl :JupyterSendRange<CR>
-" Send a selection
-vmap     <buffer> <silent> J <Plug>JupyterRunVisual <bar> <Esc>
-" Send custom code
-nnoremap <buffer> <silent> Jp :JupyterSendCode 
-
-" Debugging maps
-nnoremap <buffer> <silent> Jb :PythonSetBreak<CR>
-" }}}
+" Plug 'jupyter-vim/jupyter-vim' "{{{
+" let g:jupyter_mapkeys = 0
+" nmap J <Nop>
+" 
+" " Connect to the kernel
+" nnoremap <buffer> <silent> JJ :JupyterConnect<CR>
+" nnoremap <buffer> <silent> Jd :JupyterDisconnect<CR>
+" 
+" " Run current file
+" nnoremap <buffer> <silent> Jf :JupyterRunFile<CR>
+" nnoremap <buffer> <silent> Ji :PythonImportThisFile<CR>
+" 
+" " Send current cell
+" nnoremap <buffer> <silent> Jc :JupyterSendCell<CR>
+" " Send current line
+" nnoremap <buffer> <silent> Jl :JupyterSendRange<CR>
+" " Send a selection
+" vmap     <buffer> <silent> J <Plug>JupyterRunVisual <bar> <Esc>
+" " Send custom code
+" nnoremap <buffer> <silent> Jp :JupyterSendCode 
+" 
+" " Debugging maps
+" nnoremap <buffer> <silent> Jb :PythonSetBreak<CR>
+" " }}}
 
 " }}}
 
@@ -247,7 +247,8 @@ nnoremap <buffer> <silent> Jb :PythonSetBreak<CR>
 " ---------- Neovim Plugins ---------- {{{
 
 if has('nvim')
-  Plug 'neoclide/coc.nvim', {'do': 'yarn install --frozen-lockfile', 'for': ['c', 'cpp', 'dart', 'python', 'rust', 'javascript', 'typescript', 'vue', 'go', 'kotlin', 'prisma']} "{{{
+  " coc.nvim 0.0.82 broke auto import feature
+  Plug 'neoclide/coc.nvim', {'tag': 'v0.0.81'} "{{{
 
   " You will have bad experience for diagnostic messages when it's default 4000.
   set updatetime=300
@@ -260,19 +261,14 @@ if has('nvim')
   " Use command ':verbose imap <tab>' to make sure tab is not mapped by other plugin.
   inoremap <silent><expr> <TAB>
         \ pumvisible() ? "\<C-n>" :
-        \ <SID>check_back_space() ? "\<TAB>" :
+        "\ CheckBackspace() ? "\<Tab>" :
         \ coc#refresh()
   inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
 
-  function! s:check_back_space() abort
-    let col = col('.') - 1
-    return !col || getline('.')[col - 1]  =~# '\s'
-  endfunction
-
-  " Use <cr> to confirm completion, `<C-g>u` means break undo chain at current position.
-  " Coc only does snippet and additional edit on confirm.
-  "inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
-  inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+  " Make <CR> to accept selected completion item or notify coc.nvim to format
+  " <C-g>u breaks current undo, please make your own choice
+  inoremap <silent><expr> <CR> pumvisible() ? "\<C-y>"
+                                \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
 
   " Use `M-c` and `M-` to navigate diagnostics
   nmap <silent> <M-Down> :call CocAction('diagnosticNext')<CR>
@@ -288,6 +284,9 @@ if has('nvim')
 
   " Use K to show documentation in preview window
   nnoremap <silent> K :<C-u>call <SID>show_documentation()<CR>
+  " Use Ctrl + k to show documentation in split window
+  nnoremap <silent> <C-k> :<C-u>call <SID>show_documentation_split()<CR>
+  inoremap <silent> <C-k> <C-r>=<SID>show_documentation_split()<CR><C-e>
 
   function! s:show_documentation()
     if (index(['vim','help'], &filetype) >= 0)
@@ -295,6 +294,16 @@ if has('nvim')
     else
       call CocAction('doHover')
     endif
+  endfunction
+
+  function! s:show_documentation_split()
+    let l:winid = get(g:, 'coc_last_float_win', -1)
+    if l:winid != -1
+      let bufnr = winbufnr(l:winid)
+      exe 'below sb '.bufnr
+      call nvim_win_close(l:winid, v:false)
+    endif
+    return ''
   endfunction
 
   " Remap for rename current word
@@ -373,6 +382,8 @@ if has('nvim')
   command! CocPopd call <SID>coc_popd()
   " }}}
 
+  Plug '~/PG/Vim/3rdparty/coc-pyright', {'for': ['python']}
+
   Plug 'iamcco/markdown-preview.nvim', {'for': ['markdown', 'pandoc.markdown', 'rmd'], 'do': 'cd app & yarn install' } "{{{
   let g:mkdp_auto_start = 0
   let g:mkdp_auto_close = 0
@@ -397,6 +408,8 @@ if has('nvim')
     let g:magma_image_provider = "ueberzug"
   endif
   " }}}
+
+  Plug 'akinsho/toggleterm.nvim', {'tag' : '*'}
 
 endif
 
@@ -450,6 +463,42 @@ require("bufferline").setup {
 }
 
 require'hop'.setup()
+
+require("toggleterm").setup {
+  -- size can be a number or function which is passed the current terminal
+  size = 15,
+  open_mapping = [[<M-2>]],
+  hide_numbers = true, -- hide the number column in toggleterm buffers
+  autochdir = false, -- when neovim changes it current directory the terminal will change it's own when next it's opened
+  shade_terminals = true, -- NOTE: this option takes priority over highlights specified so if you specify Normal highlights you should set this to false
+  start_in_insert = true,
+  insert_mappings = true, -- whether or not the open mapping applies in insert mode
+  terminal_mappings = true, -- whether or not the open mapping applies in the opened terminals
+  persist_size = true,
+  persist_mode = true, -- if set to true (default) the previous terminal mode will be remembered
+  direction = 'horizontal',
+  close_on_exit = true, -- close the terminal window when the process exits
+  -- shell = vim.o.shell, -- change the default shell
+  auto_scroll = true, -- automatically scroll to the bottom on terminal output
+  -- This field is only relevant if direction is set to 'float'
+  float_opts = {
+    -- The border key is *almost* the same as 'nvim_open_win'
+    -- see :h nvim_open_win for details on borders however
+    -- the 'curved' border is a custom border type
+    -- not natively supported but implemented in this plugin.
+    border = 'single',
+    -- like `size`, width and height can be a number or function which is passed the current terminal
+    width = 70,
+    height = 10,
+    winblend = 3,
+  },
+  winbar = {
+    enabled = false,
+    name_formatter = function(term) --  term: Terminal
+      return term.name
+    end
+  }
+}
 EOF
 
 endif
