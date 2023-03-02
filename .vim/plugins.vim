@@ -93,9 +93,11 @@ Plug 'leafOfTree/vim-matchtag' "{{{
 let g:vim_matchtag_files = '*.html,*.xml,*.js,*.jsx,*.vue,*.svelte,*stpl'
 " }}}
 
-Plug 'airblade/vim-gitgutter' "{{{
-set signcolumn=auto
-" }}}
+" Plug 'airblade/vim-gitgutter' "{{{
+" set signcolumn=auto
+" " }}}
+
+Plug 'lewis6991/gitsigns.nvim', { 'tag': 'v0.6' }
 
 " Plug 'easymotion/vim-easymotion' "{{{
 " 
@@ -261,9 +263,14 @@ if has('nvim')
   " Use command ':verbose imap <tab>' to make sure tab is not mapped by other plugin.
   inoremap <silent><expr> <TAB>
         \ pumvisible() ? "\<C-n>" :
-        "\ CheckBackspace() ? "\<Tab>" :
+        \ CheckBackspace() ? "\<Tab>" :
         \ coc#refresh()
   inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+
+  function! CheckBackspace() abort
+    let col = col('.') - 1
+    return !col || getline('.')[col - 1]  =~# '\s'
+  endfunction
 
   " Make <CR> to accept selected completion item or notify coc.nvim to format
   " <C-g>u breaks current undo, please make your own choice
@@ -285,8 +292,8 @@ if has('nvim')
   " Use K to show documentation in preview window
   nnoremap <silent> K :<C-u>call <SID>show_documentation()<CR>
   " Use Ctrl + k to show documentation in split window
-  nnoremap <silent> <C-k> :<C-u>call <SID>show_documentation_split()<CR>
-  inoremap <silent> <C-k> <C-r>=<SID>show_documentation_split()<CR><C-e>
+  nnoremap <silent> <leader>k :<C-u>call <SID>show_documentation_split()<CR>
+  inoremap <silent> <leader>k <C-r>=<SID>show_documentation_split()<CR><C-e>
 
   function! s:show_documentation()
     if (index(['vim','help'], &filetype) >= 0)
@@ -498,6 +505,12 @@ require("toggleterm").setup {
       return term.name
     end
   }
+}
+
+require('gitsigns').setup {
+  signcolumn = false,  -- Toggle with `:Gitsigns toggle_signs`
+  numhl      = true, -- Toggle with `:Gitsigns toggle_numhl`
+  max_file_length = 10000, -- Disable if file is longer than this (in lines)
 }
 EOF
 

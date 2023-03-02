@@ -17,6 +17,7 @@ let g:omni_sql_no_default_maps = 1
 set noswapfile
 set encoding=utf-8
 set fileencoding=utf-8
+set fileencodings=utf-8,sjis,ucs-bom,default
 set incsearch  "incremental search
 set hlsearch  "highlight matched sequences
 set wrapscan  "searches wrap around the end of the file
@@ -197,8 +198,13 @@ highlight CocErrorVirtualText ctermfg=9 guifg=#ff0000 guibg=#2b323b
 highlight CocWarningVirtualText ctermfg=130 guifg=#ff922b guibg=#2b323b
 highlight CocHintSign guifg=#aacc33 guibg=#393939
 highlight CocHighlightText gui=underline
-highlight CocInlayHint ctermfg=243 guifg=#5C6370
+highlight CocInlayHint ctermfg=243 gui=italic guifg=#5C6370
 highlight Folded ctermbg=242 guibg=#555555 ctermfg=14 guifg=Cyan
+
+" gitsigns.nvim
+hi GitSignsAddNr gui=NONE guifg=NONE guibg=#3B5E48
+hi GitSignsChangeNr gui=NONE guifg=NONE guibg=#213A6C
+hi GitSignsDeleteNr gui=NONE guifg=NONE guibg=#5C3728
 
 function! s:vimrc_local(loc)
   let files = findfile('.vimrc.local', escape(a:loc, ' ') . ';', -1)
